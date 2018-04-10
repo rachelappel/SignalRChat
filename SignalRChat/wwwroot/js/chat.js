@@ -1,16 +1,18 @@
-﻿const connection = new signalR.HubConnection("/chathub");
+﻿const connection = new signalR.HubConnection(
+                   "/chathub", { logger: signalR.LogLevel.Information });
 
-connection.on("ReceiveMessage", (message) => {
-    const encodedMsg = message;
+connection.on("ReceiveMessage", (user, message) => { 
+    const encodedMsg = user + " says " + message;
     const li = document.createElement("li");
-    li.innerText = encodedMsg;
+    li.textContent = encodedMsg;
     document.getElementById("messagesList").appendChild(li);
 });
 
 document.getElementById("sendButton").addEventListener("click", event => {
-     const message = document.getElementById("messageInput").value;
-     connection.send("SendMessage", message).catch(err => console.error);
-     event.preventDefault();
+    const user = document.getElementById("userInput").value;
+    const message = document.getElementById("messageInput").value;    
+    connection.invoke("SendMessage", user, message).catch(err => console.error);
+    event.preventDefault();
 });
 
 connection.start().catch(err => console.error);
