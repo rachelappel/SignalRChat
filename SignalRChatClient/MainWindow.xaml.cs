@@ -29,7 +29,6 @@ namespace SignalRChatClient
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                throw;
             }
         }
 
@@ -43,7 +42,6 @@ namespace SignalRChatClient
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                throw;
             }
             
         }
