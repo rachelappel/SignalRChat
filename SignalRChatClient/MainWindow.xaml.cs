@@ -11,7 +11,7 @@ namespace SignalRChatClient
         {
             InitializeComponent();
             connection = new HubConnectionBuilder()
-            .WithUrl("https://localhost:44317/chathub")
+            .WithUrl("https://localhost:44317/ChatHub")
             .Build();
         }
 
@@ -29,7 +29,7 @@ namespace SignalRChatClient
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                throw;
+                //throw;
             }
         }
 
@@ -43,7 +43,7 @@ namespace SignalRChatClient
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                throw;
+               // throw;
             }
             
         }
