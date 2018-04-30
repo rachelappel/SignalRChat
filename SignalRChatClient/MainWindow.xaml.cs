@@ -11,39 +11,45 @@ namespace SignalRChatClient
         {
             InitializeComponent();
             connection = new HubConnectionBuilder()
-            .WithUrl("https://localhost:44317/chathub")
-            .Build();
+            .WithUrl("https://localhost:44317/ChatHub")
+            .Build();            
         }
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
+        private async void connectButton_Click(object sender, RoutedEventArgs e)
         {
-            connection.On<string>("ReceiveMessage", data =>
+            connection.On<string, string>("ReceiveMessage", (user, message) =>
             {
-                Console.WriteLine($"Received: {data}");
+                this.Dispatcher.Invoke(() =>
+                {
+                   var newMessage = $"{user}: {message}";
+                    messagesList.Items.Add(newMessage);
+                });
+
             });
 
             try
             {
                 await connection.StartAsync();
+                messagesList.Items.Add("Connection started");
+                connectButton.IsEnabled = false;
+                sendButton.IsEnabled = true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                messagesList.Items.Add(ex.Message);
             }
         }
 
-        private async void Button_Click_1(object sender, RoutedEventArgs e)
+        private async void sendButton_Click(object sender, RoutedEventArgs e)
         {
-
             try
             {
-                await connection.InvokeAsync("SendMessage", "Hello there");
+                await connection.InvokeAsync("SendMessage", userTextBox.Text, messageTextBox.Text);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                messagesList.Items.Add(ex.Message);
             }
-            
         }
     }
 }
